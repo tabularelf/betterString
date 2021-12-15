@@ -136,7 +136,7 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static width = function() {
-			return string_width(str);
+		return string_width(str);
 	}
 	
 	static widthExt = function(_sep, _w) {

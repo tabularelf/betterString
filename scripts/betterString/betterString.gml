@@ -5,7 +5,7 @@
 
 function __betterStringisString(_str) {
 	if (__is_string__(_str)) return true;
-	if (instanceof(_str) == "betterString") return true;
+	if (is_struct(_str) && (instanceof(_str) == "betterString")) return true;
 	
 	return false;
 }
@@ -39,7 +39,7 @@ function betterString(_string = "", _index, _count) constructor {
 		return string_count(_substr, str);
 	}
 	
-	static copy = function(_str, _startPos,_index, _count) {
+	static copy = function(_str, _index, _count) {
 		str = string_copy(_str, _index, _count);
 		return self;	
 	}
@@ -160,11 +160,3 @@ function betterString(_string = "", _index, _count) constructor {
 		return str;	
 	}
 }
-
-var _string = new betterString("This is a test").upper().repeatString(4).lower().insert("Hello World", 1);
-var _string2 = _string.clone().upper()
-var _string3 = _string.clone().remove(3, 4);
-
-show_debug_message([_string, is_string(_string)]);
-show_debug_message(_string2);
-show_debug_message(_string3);

@@ -1,0 +1,1 @@
+draw_text(8, 8, str.getString() + "\n" + str2.getString() + "\n" + str3.getString());

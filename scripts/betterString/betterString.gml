@@ -107,7 +107,9 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static replace = function(_substr, _newstr) {
-		str = string_replace(str, _substr, _newstr);
+		var _substr2 = is_struct(_substr) ? _substr.toString() : _substr;
+		var _newstr2 = is_struct(_newstr) ? _newstr.toString() : _newstr;
+		str = string_replace(str, _substr2, _newstr2);
 		return self;
 	}
 	

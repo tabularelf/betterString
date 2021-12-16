@@ -30,6 +30,14 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static setByteAt = function(_index, _val) {
+		if (_index+1 > string_length(str)) {
+			static _buffer = buffer_create(1, buffer_fixed, 1);
+			buffer_resize(_buffer, _index+1-length());
+			buffer_seek(_buffer, buffer_seek_start, 0);
+			buffer_fill(_buffer, 0, buffer_u8, 0x20, buffer_get_size(_buffer));
+			str += buffer_read(_buffer, buffer_text);
+			buffer_resize(_buffer, 1);
+		}
 		str = string_set_byte_at(str, _index+1, _val)
 		return self;
 	}
@@ -75,7 +83,7 @@ function betterString(_string = "", _index, _count) constructor {
 		return string_last_pos(_substr, str)-1;	
 	}
 	
-	static lasPostExt = function(_substr, _startPos) {
+	static lastPosExt = function(_substr, _startPos) {
 		return string_last_pos_ext(_substr, str, _startPos+1)-1;
 	}
 	

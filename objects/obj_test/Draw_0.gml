@@ -1,1 +1,1 @@
-draw_text(8, 8, str.getString() + "\n" + str2.getString() + "\n" + str3.getString());
+draw_text(8, 8, str.get() + " : " + new betterString(is_string(str)).get() + "\n" + str2.get() + "\n" + str3.get());

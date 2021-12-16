@@ -1,5 +1,3 @@
-/// @func betterString(string)
-/// @param string
 #macro is_string __betterStringisString
 #macro __is_string__ is_string
 
@@ -10,9 +8,18 @@ function __betterStringisString(_str) {
 	return false;
 }
 
+/// @func betterString(string, [index], [count])
+/// @param string
+/// @param [index]
+/// @param [count]
 function betterString(_string = "", _index, _count) constructor {
 	var _str = !is_string(_string) ? string(_string) : _string;
-	str = string_copy(_str, is_undefined(_index) ? 1 : _index, is_undefined(_count) ? string_length(_str) : _count);
+	
+	if !(is_undefined(_index) || is_undefined(_count)) {
+		str = string_copy(_str, is_undefined(_index) ? 1 : _index, is_undefined(_count) ? string_length(_str) : _count);	
+	} else {
+		str = _str;	
+	}
 	
 	static byteAt = function(_index) {
 		return string_byte_at(str, _index);
@@ -42,11 +49,6 @@ function betterString(_string = "", _index, _count) constructor {
 	static copy = function(_str, _index, _count) {
 		str = string_copy(_str, _index, _count);
 		return self;	
-	}
-	
-	static remove = function(_index, _count) {
-		str = string_delete(str, _index, _count);
-		return self;
 	}
 	
 	static digits = function() {
@@ -152,8 +154,23 @@ function betterString(_string = "", _index, _count) constructor {
 		return new betterString(str);	
 	}
 	
-	static getString = function() {
-		return str;	
+	static get = function() {
+		return toString();	
+	}
+	
+	static remove = function(_index, _count) {
+		str = string_delete(str, _index, _count);
+		return self;
+	}
+	
+	static clear = function() {
+		str = "";
+		return self;
+	}
+	
+	static set = function(_str) {
+		str = !is_string(_str) ? string(_str) : _str;
+		return self;
 	}
 	
 	static toString = function() {

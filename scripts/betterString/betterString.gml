@@ -150,6 +150,47 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
+	static upperExt = function(_startPos, _endPos  = 1) {
+		var _string = str;
+		var _stringCopy = string_copy(_string, _startPos, _endPos);
+		_stringCopy = string_upper(_stringCopy);
+		var _newString = string_delete(_string,_startPos,_endPos);
+		str = string_insert(_stringCopy, _newString, _startPos);	
+		return self;
+	}
+	
+	static lowerExt = function(_startPos, _endPos  = 1) {
+		var _string = str;
+		var _stringCopy = string_copy(_string, _startPos, _endPos);
+		_stringCopy = string_lower(_stringCopy);
+		var _newString = string_delete(_string,_startPos,_endPos);
+		str = string_insert(_stringCopy, _newString, _startPos);	
+		return self;
+	}
+	
+	static lettersExt = function(_lettersToRemove, _index, _count) {
+		var _string = str;
+		var _i = is_undefined(_index) ? 1 : _index;
+		var _length = is_undefined(_count) ? string_length(_lettersToRemove) : _count+1-_index;
+		repeat(string_length(_string)) {
+			var _ii = 1;
+			repeat(_length) {
+				var _a = string_char_at(_string, _i)
+				var _b = string_char_at(_lettersToRemove, _ii)
+				if _a == _b {
+					_string = string_delete(_string, _i, 1);
+					--_i;
+					break;
+				}
+				++_ii;	
+			}
+			++_i;
+		}
+		
+		str = _string;
+		return self;
+	}
+	
 	static clone = function() {
 		return new betterString(str);	
 	}

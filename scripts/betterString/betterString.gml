@@ -66,12 +66,9 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static insert = function(_substr, _index) {
-		str = string_insert(_substr, str, _index);
+		var _substr2 = is_struct(_substr) ? _substr.toString() : _substr;
+		str = string_insert(_substr2, str, _index);
 		return self;	
-	}
-	
-	static add = function(_substr) {
-		str += !is_string(_substr) ? string(_substr) : _substr;
 	}
 	
 	static lastPos = function(_substr) {
@@ -191,6 +188,12 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
+	static add = function(_str) {
+		var _str2 = is_struct(_str) ? _str.toString() : _str;
+		str += !is_string(_str2) ? string(_str2) : _str2;
+		return self;
+	}
+	
 	static clone = function() {
 		return new betterString(str);	
 	}
@@ -210,7 +213,8 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static set = function(_str) {
-		str = !is_string(_str) ? string(_str) : _str;
+		var _str2 = is_struct(_str) ? _str.toString() : _str;
+		str = !is_string(_str2) ? string(_str2) : _str2;
 		return self;
 	}
 	

@@ -16,13 +16,13 @@ function betterString(_string = "", _index, _count) constructor {
 	var _str = !is_string(_string) ? string(_string) : _string;
 	
 	if !(is_undefined(_index) || is_undefined(_count)) {
-		str = string_copy(_str, is_undefined(_index) ? 1 : _index, is_undefined(_count) ? string_length(_str) : _count);	
+		str = string_copy(_str, is_undefined(_index) ? 1 : _index+1, is_undefined(_count) ? string_length(_str) : _count);	
 	} else {
 		str = _str;	
 	}
 	
 	static byteAt = function(_index) {
-		return string_byte_at(str, _index);
+		return string_byte_at(str, _index+1);
 	}
 	
 	static byteLength = function() {
@@ -30,16 +30,16 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static setByteAt = function(_index, _val) {
-		str = string_set_byte_at(str, _index, _val)
+		str = string_set_byte_at(str, _index+1, _val)
 		return self;
 	}
 	
 	static charAt = function(_index) {
-		return string_char_at(str, _index);
+		return string_char_at(str, _index+1);
 	}
 	
 	static ordAt = function(_index) {
-		return string_ord_at(str, _index);
+		return string_ord_at(str, _index+1);
 	}
 	
 	static count = function(_substr) {
@@ -47,7 +47,7 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static copy = function(_str, _index, _count) {
-		str = string_copy(_str, _index, _count);
+		str = string_copy(_str, _index+1, _count);
 		return self;	
 	}
 	
@@ -67,16 +67,16 @@ function betterString(_string = "", _index, _count) constructor {
 	
 	static insert = function(_substr, _index) {
 		var _substr2 = is_struct(_substr) ? _substr.toString() : _substr;
-		str = string_insert(_substr2, str, _index);
+		str = string_insert(_substr2, str, _index+1);
 		return self;	
 	}
 	
 	static lastPos = function(_substr) {
-		return string_last_pos(_substr, str);	
+		return string_last_pos(_substr, str)-1;	
 	}
 	
 	static lasPostExt = function(_substr, _startPos) {
-		return string_last_pos_ext(_substr, str, _startPos);
+		return string_last_pos_ext(_substr, str, _startPos+1)-1;
 	}
 	
 	static length = function() {
@@ -99,11 +99,11 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static pos = function(_substr) {
-		return string_pos(_substr, str);
+		return string_pos(_substr, str)-1;
 	}
 	
 	static posExt = function(_substr, _startPos) {
-		return string_pos_ext(_substr, str, _startPos);
+		return string_pos_ext(_substr, str, _startPos+1)-1;
 	}
 	
 	static replace = function(_substr, _newstr) {
@@ -149,28 +149,28 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
-	static upperExt = function(_startPos, _endPos  = 1) {
+	static upperExt = function(_index, _count  = 1) {
 		var _string = str;
-		var _stringCopy = string_copy(_string, _startPos, _endPos);
+		var _stringCopy = string_copy(_string, _index+1, _count);
 		_stringCopy = string_upper(_stringCopy);
-		var _newString = string_delete(_string,_startPos,_endPos);
-		str = string_insert(_stringCopy, _newString, _startPos);	
+		var _newString = string_delete(_string,_index+1,_count);
+		str = string_insert(_stringCopy, _newString, _index+1);	
 		return self;
 	}
 	
-	static lowerExt = function(_startPos, _endPos  = 1) {
+	static lowerExt = function(_index, _count  = 1) {
 		var _string = str;
-		var _stringCopy = string_copy(_string, _startPos, _endPos);
+		var _stringCopy = string_copy(_string, _index+1, _count);
 		_stringCopy = string_lower(_stringCopy);
-		var _newString = string_delete(_string,_startPos,_endPos);
-		str = string_insert(_stringCopy, _newString, _startPos);	
+		var _newString = string_delete(_string,_index+1,_count);
+		str = string_insert(_stringCopy, _newString, _index+1);	
 		return self;
 	}
 	
 	static lettersExt = function(_lettersToRemove, _index, _count) {
 		var _string = str;
-		var _i = is_undefined(_index) ? 1 : _index;
-		var _length = is_undefined(_count) ? string_length(_lettersToRemove) : _count+1-_index;
+		var _i = is_undefined(_index) ? 1 : _index+1;
+		var _length = is_undefined(_count) ? string_length(_lettersToRemove) : _count+1-_index+1;
 		repeat(string_length(_string)) {
 			var _ii = 1;
 			repeat(_length) {
@@ -205,7 +205,7 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static remove = function(_index, _count) {
-		str = string_delete(str, _index, _count);
+		str = string_delete(str, _index+1, _count);
 		return self;
 	}
 	

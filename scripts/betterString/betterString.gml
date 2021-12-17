@@ -228,8 +228,34 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
-	static match = function(_str) {
-			
+	static trim = function() {
+			trimStart();
+			trimEnd();
+			return self;
+	}
+	
+	static trimStart = function() {
+		var _str = str;
+		var _i = 1;
+		while((_i < string_length(_str)) && (string_byte_at(_str, _i) == 0x20)) {
+			++_i;	
+		}
+		
+		_str = string_delete(_str, 1, _i-1);
+		str = _str;
+		return self;
+	}
+	
+	static trimEnd = function() {
+		var _str = str;
+		var _i = string_length(_str);
+		while((_i > 0) && (string_byte_at(_str, _i) == 0x20)) {
+			--_i;	
+		}
+		
+		_str = string_delete(_str, _i+1, string_length(_str)-_i);
+		str = _str;
+		return self;	
 	}
 	
 	static slice = function(_index, _count = string_length(str)) {

@@ -233,7 +233,7 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static slice = function(_index, _count = string_length(str)) {
-		return new betterString(string_copy(str, _index, _count));
+		return new betterString(string_copy(str, _index+1, _count));
 	}
 	
 	static split = function(_str, _maxLimit = all) {

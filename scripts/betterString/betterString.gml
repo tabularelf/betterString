@@ -126,10 +126,12 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
-	static repeatString = function(_count) {
+	static repeatStr = function(_count) {
 		str = string_repeat(str, _count);
 		return self;
 	}
+	
+	static repeatString = method(undefined, repeatStr);
 	
 	static upper = function() {
 		str = string_upper(str);
@@ -208,14 +210,12 @@ function betterString(_string = "", _index, _count) constructor {
 		return new betterString(str);	
 	}
 	
-	static get = function() {
-		return toString();	
-	}
-	
 	static remove = function(_index, _count) {
 		str = string_delete(str, _index+1, _count);
 		return self;
 	}
+	
+	static del = method(undefined, remove);
 	
 	static clear = function() {
 		str = "";
@@ -228,7 +228,39 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
+	static match = function(_str) {
+			
+	}
+	
+	static slice = function(_index, _count = string_length(str)) {
+		return new betterString(string_copy(str, _index, _count));
+	}
+	
+	static split = function(_str, _maxLimit = all) {
+		if (is_undefined(_str)) {
+			return new betterString("Array [" + str + "]");	
+		}
+		
+		var __str = str;
+		var _stringLength = string_length(_str);
+		var _limit = (_maxLimit == all) ? string_count(_str, str) : _maxLimit;
+		var _i = 0;
+		var _pos = 1;
+		var _array = array_create(_limit);
+		repeat(_limit) {
+			_pos = string_pos(_str, __str) - 1;
+			_array[_i] = string_copy(__str, 1, _pos);
+			__str = string_delete(__str, 1, _pos + _stringLength);
+			++_i;
+		}
+		_array[_i] = string_copy(__str, 1, string_length(__str));
+		
+		return _array;
+	}
+	
 	static toString = function() {
 		return str;	
 	}
+	
+	static get = method(undefined, toString);
 }

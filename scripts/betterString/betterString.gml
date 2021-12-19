@@ -69,7 +69,7 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
-	static toReal = function(_dec = 2) {
+	static toReal = function() {
 		return real(string_digits(str));
 	}
 	

@@ -1,4 +1,5 @@
 str = new betterString("This is a test, ").upper().repeatString(4).lower().insert("Hello World", 0);
+show_message(str.substring("TestTest"));
 str2 = str.clone().upper().strip("AEIOU", 4);
 str3 = str.clone().remove(2, 4).insert(new betterString("Test"), 2).add(new betterString("Testing123"));
 str4 = new betterString("          Hello World!").setByteAt(30, 0x68).add("Test").concat("                    ");
@@ -18,7 +19,7 @@ show_debug_message(_struct);
 
 show_debug_message(str5);
 show_debug_message(str5.clone().insert(new betterString("	").repeatStr(4), 12));
-show_debug_message(str5.clone().insert(new betterString("	").repeatStr(4), 12).strip("	"));
+show_debug_message(str5.clone().insert(new betterString("	").repeatStr(4), 12).tabsToSpaces());
 show_debug_message(str5.split(" "));
 show_debug_message(str5.slice(31));
 show_debug_message(new betterString("Hello World!\a\v\f\t\b\r\n").rawCodes());

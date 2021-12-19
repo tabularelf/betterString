@@ -308,7 +308,11 @@ function betterString(_string = "", _index, _count) constructor {
 			_substr = _str;	
 		}
 		
-		return new betterString(str, string_pos(_substr, str), string_length(_substr));
+		if (exists(_substr)) {
+			return new betterString(str, pos(_substr), string_length(_substr));
+		} 
+		
+		return new betterString();
 	}
 	
 	static before = function(_str) {
@@ -359,15 +363,7 @@ function betterString(_string = "", _index, _count) constructor {
 	static tabsToSpaces = function(_spaces = 4) {
 		var _i = 0;
 		var _spaceStr = new betterString(" ").repeatStr(_spaces);
-		repeat(length()) {
-			if (byteAt(_i) == 0x9) {
-				del(_i, 1);
-				insert(_spaceStr, _i);
-				_i += _spaces;
-			} else {
-				++_i;	
-			}
-		}
+		replaceAll("	", _spaceStr);
 		
 		return self;
 	}

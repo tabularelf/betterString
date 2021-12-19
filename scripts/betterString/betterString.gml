@@ -56,7 +56,7 @@ function betterString(_string = "", _index, _count) constructor {
 	
 	static copy = function(_str, _index, _count) {
 		str = string_copy(_str, _index+1, _count);
-		return self;	
+		return self;
 	}
 	
 	static digits = function() {
@@ -177,34 +177,18 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
-	static lettersExt = function(_lettersToRemove, _index, _count) {
-		var _string = str;
-		var _i = is_undefined(_index) ? 1 : _index+1;
-		var _length = is_undefined(_count) ? string_length(_lettersToRemove) : _count+1-_index+1;
-		repeat(string_length(_string)) {
-			var _ii = 1;
-			repeat(_length) {
-				var _a = string_char_at(_string, _i)
-				var _b = string_char_at(_lettersToRemove, _ii)
-				if _a == _b {
-					_string = string_delete(_string, _i, 1);
-					--_i;
-					break;
-				}
-				++_ii;	
-			}
+	static add = function() {
+		var _i = 0;
+		var _str;
+		repeat(argument_count) {
+			_str = is_struct(argument[_i]) ? argument[_i].toString() : argument[_i];
+			str += !is_string(_str) ? string(_str) : _str;
 			++_i;
 		}
-		
-		str = _string;
 		return self;
 	}
 	
-	static add = function(_str) {
-		var _str2 = is_struct(_str) ? _str.toString() : _str;
-		str += !is_string(_str2) ? string(_str2) : _str2;
-		return self;
-	}
+	static concat = add;
 	
 	static clone = function() {
 		return new betterString(str);	
@@ -215,7 +199,7 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;
 	}
 	
-	static del = method(undefined, remove);
+	static del = remove;
 	
 	static clear = function() {
 		str = "";
@@ -258,13 +242,44 @@ function betterString(_string = "", _index, _count) constructor {
 		return self;	
 	}
 	
-	static slice = function(_index, _count = string_length(str)) {
-		return new betterString(string_copy(str, _index+1, _count));
+	static strip = function(_lettersToRemove, _index, _count) {
+		var _bytes = array_create(string_length(_lettersToRemove));
+		var _i = 0;
+		repeat(string_length(_lettersToRemove)) {
+			_bytes[_i] = string_byte_at(_lettersToRemove, _i);
+			++_i;
+		}
+		
+		var _bytesLength = array_length(_bytes);
+		
+		var _string = str;
+		var _i = is_undefined(_index) ? 1 : _index+1;
+		var _length = is_undefined(_count) ? string_length(_string) : _count+1-_index+1;
+		repeat(_length) {
+			var _ii = 0;
+			repeat(_bytesLength) {
+				var _a = string_byte_at(_string, _i);
+				if _a == _bytes[_ii] {
+					_string = string_delete(_string, _i, 1);
+					--_i;
+					break;
+				}
+				++_ii;	
+			}
+			++_i;
+		}
+		
+		str = _string;
+		return self;
+	}
+	
+	static slice = function(_index, _count = string_length(str)-_index+1) {
+		return new betterString(str, _index+1, _count);
 	}
 	
 	static split = function(_str, _maxLimit = all) {
 		if (is_undefined(_str)) {
-			return new betterString("Array [" + str + "]");	
+			return new betterString([str]);	
 		}
 		
 		var __str = str;
@@ -272,21 +287,104 @@ function betterString(_string = "", _index, _count) constructor {
 		var _limit = (_maxLimit == all) ? string_count(_str, str) : _maxLimit;
 		var _i = 0;
 		var _pos = 1;
-		var _array = array_create(_limit);
+		var _lastPos = string_pos_ext(_str, __str, 1);
+		var _array = array_create(_limit+1);
 		repeat(_limit) {
-			_pos = string_pos(_str, __str) - 1;
-			_array[_i] = string_copy(__str, 1, _pos);
-			__str = string_delete(__str, 1, _pos + _stringLength);
+			_array[_i] = new betterString(__str, _pos-1, _lastPos-_pos);
+			_pos = _lastPos+1;
+			_lastPos = string_pos_ext(_str, __str, _lastPos);
 			++_i;
 		}
-		_array[_i] = string_copy(__str, 1, string_length(__str));
+		_array[_i] =  new betterString(__str, _pos-1, string_length(__str));
 		
 		return _array;
+	}
+	
+	static substring = function(_str) {
+		var _substr;
+		if !(is_string(_str)) {
+			_substr = string(_str);	
+		} else {
+			_substr = _str;	
+		}
+		
+		return new betterString(str, string_pos(_substr, str), string_length(_substr));
+	}
+	
+	static before = function(_str) {
+		var _substr;
+		if !(is_string(_str)) {
+			_substr = string(_str);	
+		} else {
+			_substr = _str;	
+		}
+		
+		return new betterString(str, 0, string_pos(_substr, str)-1);
+	}
+	
+	static after = function(_str) {
+		var _substr;
+		if !(is_string(_str)) {
+			_substr = string(_str);	
+		} else {
+			_substr = _str;	
+		}
+		
+		return new betterString(str, string_pos(_substr, str), string_length(str));
+	}
+	
+	static rawCodes = function() {
+		replaceAll("\n", "\\n");
+		replaceAll("\r", "\\r");
+		replaceAll("\b", "\\b");
+		replaceAll("\v", "\\v");
+		replaceAll("\f", "\\f");
+		replaceAll("\a", "\\a");
+		replaceAll("\t", "\\t");
+		
+		return self;
+	}
+	
+	static unrawCodes = function() {
+		replaceAll("\\n", "\n");
+		replaceAll("\\r", "\r");
+		replaceAll("\\b", "\b");
+		replaceAll("\\v", "\v");
+		replaceAll("\\f", "\f");
+		replaceAll("\\a", "\a");
+		replaceAll("\\t", "\t");
+		return self;
+	}
+	
+	static tabsToSpaces = function(_spaces = 4) {
+		var _i = 0;
+		var _spaceStr = new betterString(" ").repeatStr(_spaces);
+		repeat(length()) {
+			if (byteAt(_i) == 0x9) {
+				del(_i, 1);
+				insert(_spaceStr, _i);
+				_i += _spaces;
+			} else {
+				++_i;	
+			}
+		}
+		
+		return self;
+	}
+	
+	static exists = function(_substring, _caseSensitive = true) {
+		
+		if !(_caseSensitive) {
+			var _str = string_upper(toString());
+			return string_pos(string_upper(_substring), _str) > 0;
+		}
+		
+		return pos(_substring) > 0;
 	}
 	
 	static toString = function() {
 		return str;	
 	}
 	
-	static get = method(undefined, toString);
+	static get = toString;
 }

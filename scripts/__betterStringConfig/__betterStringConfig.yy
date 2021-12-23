@@ -6,7 +6,7 @@
     "path": "folders/betterString.yy",
   },
   "resourceVersion": "1.0",
-  "name": "betterString",
+  "name": "__betterStringConfig",
   "tags": [],
   "resourceType": "GMScript",
 }

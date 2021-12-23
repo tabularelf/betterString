@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "betterString",
-    "path": "folders/betterString.yy",
+    "name": ":(",
+    "path": "folders/betterString/System (Don't Look)/:(.yy",
   },
   "resourceVersion": "1.0",
-  "name": "betterString",
+  "name": "__betterStringisString",
   "tags": [],
   "resourceType": "GMScript",
 }

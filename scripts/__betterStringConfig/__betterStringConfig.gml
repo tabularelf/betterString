@@ -1,0 +1,1 @@
+#macro BETTERSTRING_HIJACK_JSON_FUNCS false // Currently unsupported as it's a WIP

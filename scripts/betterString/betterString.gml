@@ -1,13 +1,3 @@
-#macro is_string __betterStringisString
-#macro __is_string__ is_string
-
-function __betterStringisString(_str) {
-	if (__is_string__(_str)) return true;
-	if (is_struct(_str) && (instanceof(_str) == "betterString")) return true;
-	
-	return false;
-}
-
 /// @func betterString(string, [index], [count])
 /// @param string
 /// @param [index]
@@ -67,10 +57,6 @@ function betterString(_string = "", _index, _count) constructor {
 	static format = function(_total = 0, _dec = 2) {
 		str = string_format(real(string_digits(str)), _total, _dec);
 		return self;
-	}
-	
-	static toReal = function() {
-		return real(string_digits(str));
 	}
 	
 	static insert = function(_substr, _index) {
@@ -221,24 +207,60 @@ function betterString(_string = "", _index, _count) constructor {
 	static trimStart = function() {
 		var _str = str;
 		var _i = 1;
-		while((_i < string_length(_str)) && (string_byte_at(_str, _i) == 0x20)) {
+		var _breakOut = false;
+		var _whitespaceFound = false;
+		
+		while((_i < string_length(_str))) {
+			
+			switch(string_byte_at(_str, _i)) {
+				case 0x20: case 0x9: case 0xA: case 0xD: // Space, tab, newline, carriage return
+					_whitespaceFound = true;
+				break;
+				
+				default: // The rest
+					_breakOut = true;
+				break;
+			}
+			
+			if (_breakOut) break;
+			
 			++_i;	
 		}
 		
-		_str = string_delete(_str, 1, _i-1);
-		str = _str;
+		if (_whitespaceFound) {
+			_str = string_delete(_str, 1, _i-1);
+			str = _str;
+		}
 		return self;
 	}
 	
 	static trimEnd = function() {
 		var _str = str;
 		var _i = string_length(_str);
-		while((_i > 0) && (string_byte_at(_str, _i) == 0x20)) {
+		var _breakOut = false;
+		var _whitespaceFound = false;
+		
+		while(_i > 0) {
+			
+			switch(string_byte_at(_str, _i)) {
+				case 0x20: case 0x9: case 0xA: case 0xD: // Space, tab, newline, carriage return
+					_whitespaceFound = true;
+				break;
+				
+				default: // The rest
+					_breakOut = true;
+				break;
+			}
+			
+			if (_breakOut) break;
+			
 			--_i;	
 		}
 		
-		_str = string_delete(_str, _i+1, string_length(_str)-_i);
-		str = _str;
+		if (_whitespaceFound) {
+			_str = string_delete(_str, _i+1, string_length(_str)-_i);
+			str = _str;
+		}
 		return self;	
 	}
 	
@@ -334,7 +356,7 @@ function betterString(_string = "", _index, _count) constructor {
 			_substr = _str;	
 		}
 		
-		return new betterString(str, string_pos(_substr, str), string_length(str));
+		return new betterString(str, string_pos(_substr, str)+string_length(_substr)-1, string_length(str));
 	}
 	
 	static rawCodes = function() {
@@ -369,13 +391,16 @@ function betterString(_string = "", _index, _count) constructor {
 	}
 	
 	static exists = function(_substring, _caseSensitive = true) {
-		
 		if !(_caseSensitive) {
 			var _str = string_upper(toString());
-			return string_pos(string_upper(_substring), _str) > 0;
+			return string_pos(string_upper(_substring), _str) > -1;
 		}
 		
-		return pos(_substring) > 0;
+		return pos(_substring) > -1;
+	}
+	
+	static export = function() {
+		return "@@betterString@@" + str;	
 	}
 	
 	static toString = function() {
